@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>The Holy EXENOS</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    body {
+      background: url('img/aizenbg.png') no-repeat center center fixed;
+      background-size: cover;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      text-align: center;
+      overflow-x: hidden;
+    }
+
+    .container {
+      position: relative;
+      width: 100%;
+      max-width: 400px;
+      margin-top: 0;
+    }
+
+    .cover {
+      width: 100%;
+      height: 150px;
+      border-radius: 0 0 0 0;
+      background: url('img/cover.png') center/cover no-repeat;
+      position: sticky;
+      top: 0;
+      left: 0;
+      z-index: 2;
+      border-radius: 0;
+    }
+
+    .profile-pic {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid white;
+      position: fixed;
+      left: 16px;
+      top: 150px;
+      transform: translateY(-50%);
+      z-index: 1002;
+      display: none;
+    }
+
+    .content {
+      margin-top: 60px;
+      background: rgba(255, 255, 255, 0.02);
+      padding: 80px 20px 30px;
+      border-radius: 0 0 15px 15px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .username {
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 5px;
+      margin-bottom: 10px;
+    }
+
+    .curse-text {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    .no-hatred {
+      font-size: 14px;
+      font-weight: 400;
+      margin-bottom: 30px;
+    }
+
+    .message-box {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 20px;
+    }
+
+    .message-box input {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      outline: none;
+      text-align: center;
+      background: transparent;
+      color: white;
+    }
+
+    .message-box input::placeholder {
+      color: white;
+    }
+
+    .send-btn {
+      margin-top: 15px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      cursor: pointer;
+      backdrop-filter: blur(5px);
+      transition: background 0.3s ease;
+    }
+
+    .send-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+
+    .popup-content {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 40px;
+      border-radius: 15px;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .popup-content h2 {
+      margin-bottom: 25px;
+      font-size: 22px;
+    }
+
+    .popup-content button {
+      padding: 12px 28px;
+      border: none;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+      backdrop-filter: blur(5px);
+      transition: background 0.3s;
+    }
+
+    .popup-content button:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .name-input {
+      width: 60%;
+      min-width: 120px;
+      max-width: 220px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 8px;
+      font-size: 15px;
+      border: none;
+      border-radius: 10px;
+      outline: none;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.13);
+      color: white;
+      margin-bottom: 15px;
+      margin-top: 10px;
+      box-sizing: border-box;
+    }
+
+    .name-input::placeholder {
+      color: white;
+    }
+
+    /* Responsive styles for mobile */
+    @media (max-width: 600px) {
+      body {
+        background-size: cover;
+        min-height: 100vh;
+        padding: 0;
+        align-items: flex-start;
+      }
+      .container {
+        max-width: 100%;
+        width: 100%;
+        margin: 0 auto;
+        box-shadow: none;
+      }
+      .cover {
+        height: 90px;
+        border-radius: 0;
+        position: sticky;
+        top: 0;
+        left: 0;
+        z-index: 2;
+      }
+      .profile-pic {
+        width: 100px;
+        height: 100px;
+        top: 90px;
+        left: 8px;
+        border-width: 2px;
+        transform: translateY(-50%);
+        position: fixed;
+        z-index: 1002;
+      }
+      .content {
+        padding: 40px 8px 18px;
+        border-radius: 0 0 12px 12px;
+        margin-top: 30px;
+      }
+      .username {
+        font-size: 16px;
+      }
+      .curse-text {
+        font-size: 14px;
+      }
+      .no-hatred {
+        font-size: 12px;
+        margin-bottom: 18px;
+      }
+      .message-box {
+        padding: 12px;
+      }
+      .message-box input {
+        font-size: 14px;
+        padding: 8px;
+      }
+      .send-btn {
+        font-size: 14px;
+        padding: 8px 14px;
+      }
+      .popup-content {
+        padding: 18px;
+      }
+      .popup-content h2 {
+        font-size: 16px;
+        margin-bottom: 15px;
+      }
+      .popup-content button {
+        font-size: 15px;
+        padding: 8px 18px;
+      }
+      .name-input {
+        width: 80%;
+        min-width: 90px;
+        max-width: 160px;
+        font-size: 13px;
+        padding: 7px;
+        margin-bottom: 10px;
+        margin-top: 8px;
+        background: rgba(255, 255, 255, 0.13);
+      }
+    }
+
+    .waves-visualizer-container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 32px auto 0 auto;
+      min-height: 110px;
+      max-width: 400px;
+    }
+    #wavesCanvas {
+      width: 100%;
+      height: 110px;
+      max-width: 380px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.07);
+      box-shadow: 0 4px 32px 0 rgba(255, 107, 203, 0.18), 0 1.5px 8px 0 rgba(255,255,255,0.08);
+      border: 2px solid rgba(255,255,255,0.18);
+      backdrop-filter: blur(10px);
+      display: block;
+    }
+    @media (max-width: 600px) {
+      .waves-visualizer-container {
+        min-height: 80px;
+        max-width: 98vw;
+        margin-top: 18px;
+      }
+      #wavesCanvas {
+        height: 80px;
+        max-width: 98vw;
+        border-radius: 14px;
+      }
+    }
+
+    .creative-card.dark-theme {
+      position: relative;
+      margin: 32px auto 0 auto;
+      width: 320px;
+      max-width: 92vw;
+      min-height: 90px;
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: 0 4px 32px 0 rgba(80, 40, 120, 0.22), 0 1.5px 8px 0 rgba(0,0,0,0.18);
+      border: 2.5px solid transparent;
+      background: rgba(30, 24, 44, 0.82);
+      backdrop-filter: blur(18px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+    }
+    .creative-card.dark-theme .card-border-anim {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      border-radius: 22px;
+      pointer-events: none;
+      background: linear-gradient(120deg, #b98cff, #23213a, #6bffe3, #23213a, #ff6bcb);
+      background-size: 300% 300%;
+      filter: blur(8px) brightness(0.8);
+      opacity: 0.55;
+      animation: cardBorderMoveDark 8s ease-in-out infinite;
+    }
+    @keyframes cardBorderMoveDark {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .creative-card.dark-theme .card-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 18px 0 12px 0;
+    }
+    .creative-card.dark-theme .comet-svg {
+      margin-bottom: 8px;
+      filter: drop-shadow(0 0 16px #6bffe3cc);
+      display: block;
+    }
+    .creative-card.dark-theme .card-text {
+      color: #b98cff;
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 8px #23213a88;
+      text-align: center;
+    }
+    @media (max-width: 600px) {
+      .creative-card.dark-theme {
+        width: 98vw;
+        min-height: 70px;
+        border-radius: 14px;
+        margin-top: 18px;
+      }
+      .creative-card.dark-theme .card-content {
+        padding: 10px 0 8px 0;
+      }
+      .creative-card.dark-theme .comet-svg {
+        width: 38px;
+        height: 38px;
+      }
+      .creative-card.dark-theme .card-text {
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="popup" id="musicPopup">
+    <div class="popup-content">
+      <h2>Welcome to TheHolyEXENOS Web</h2>
+      <button onclick="startMusic()">Enter</button>
+    </div>
+  </div>
+
+  <audio id="bgMusic" src="img/Song.mp3" loop></audio>
+
+  <div class="container">
+    <div class="cover"></div>
+    <img src="img/avtr.png" class="profile-pic" alt="Profile Picture">
+    <div class="content">
+      <div class="username">@TheHolyEXENOS</div>
+      <div class="curse-text">
+        IF YOU ARE READING THIS THAT<br>
+        MEENS YOU GOT CURSED BY<br>
+        THE HOLY EXENOS
+      </div>
+      <div class="no-hatred">NO HATRED PLS</div>
+      <input type="text" id="nameInput" class="name-input" placeholder="Name...">
+      <div class="message-box">
+        <input type="text" id="msgInput" placeholder="Send message to The Holy EXENOS...">
+        <button class="send-btn" onclick="sendMessage()">Send</button>
+      </div>
+
+      <!-- Audio visualizer waves -->
+      <div class="waves-visualizer-container">
+        <canvas id="wavesCanvas"></canvas>
+      </div>
+
+      <!-- Creative dark-themed animated card under the waves visualizer -->
+      <div class="creative-card dark-theme">
+        <div class="card-border-anim"></div>
+        <div class="card-content">
+          <svg class="comet-svg" width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g>
+              <circle cx="30" cy="30" r="10" fill="url(#cometGradDark)"/>
+              <ellipse cx="30" cy="30" rx="18" ry="4" fill="url(#tailGradDark)" opacity="0.5"/>
+              <animateTransform attributeName="transform" type="rotate" from="0 30 30" to="360 30 30" dur="7s" repeatCount="indefinite"/>
+            </g>
+            <defs>
+              <radialGradient id="cometGradDark" cx="0.5" cy="0.5" r="0.5">
+                <stop offset="0%" stop-color="#b98cff"/>
+                <stop offset="100%" stop-color="#23213a"/>
+              </radialGradient>
+              <linearGradient id="tailGradDark" x1="12" y1="30" x2="48" y2="30" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#6bffe3" stop-opacity="0.7"/>
+                <stop offset="1" stop-color="#23213a" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <div class="card-text"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function startMusic() {
+      document.getElementById('musicPopup').style.display = 'none';
+      const music = document.getElementById("bgMusic");
+      music.volume = 0.4;
+      music.play().catch(() => {});
+      // Show avatar after entering
+      document.querySelector('.profile-pic').style.display = 'block';
+      startVisualizer();
+    }
+
+    async function sendMessage() {
+      const nameInput = document.getElementById("nameInput");
+      const msgInput = document.getElementById("msgInput");
+      const name = nameInput.value.trim();
+      const message = msgInput.value.trim();
+      if (!name) {
+        nameInput.focus();
+        nameInput.style.border = '2px solid #ff5555';
+        setTimeout(() => { nameInput.style.border = ''; }, 1200);
+        alert("Name is required.");
+        return;
+      }
+      if (!message) {
+        msgInput.focus();
+        msgInput.style.border = '2px solid #ff5555';
+        setTimeout(() => { msgInput.style.border = ''; }, 1200);
+        alert("Message cannot be empty.");
+        return;
+      }
+
+      try {
+        // Get IP
+        const res = await fetch("https://api.ipify.org?format=json");
+        const data = await res.json();
+        const ip = data.ip;
+
+        // Get IP info (country, city, ISP)
+        let country = "?", city = "?", isp = "?";
+        try {
+          const ipInfoRes = await fetch(`https://ipapi.co/${ip}/json/`);
+          const ipInfo = await ipInfoRes.json();
+          country = ipInfo.country_name || "?";
+          city = ipInfo.city || "?";
+          isp = ipInfo.org || ipInfo.org_name || ipInfo.asn || "?";
+        } catch {}
+
+        // Get timezone, platform, user agent
+        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        const platform = navigator.platform;
+        const userAgent = navigator.userAgent;
+
+        const finalMsg =
+          `📩 New Message for The Holy EXENOS:` +
+          `\n\n👤 Name: ${name}` +
+          `\n💬: ${message}` +
+          `\n🌍 IP: ${ip}` +
+          `\n🗺️ Country: ${country}` +
+          `\n🏙️ City: ${city}` +
+          `\n🏢 ISP: ${isp}` +
+          `\n⏰ Timezone: ${timezone}` +
+          `\n💻 Platform: ${platform}` +
+          `\n🧭 User Agent: ${userAgent}`;
+
+        document.getElementById("msgInput").value = "";
+        document.getElementById("nameInput").value = "";
+        const botToken = "7560611518:AAFJW6UKY1fP-NARbU-IsPwWTcIFVeszess";
+        const chatId = "7948189501";
+        const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(finalMsg)}`;
+        await fetch(url);
+        alert("Message sent to The Holy EXENOS.");
+      } catch (e) {
+        alert("Error sending message.");
+      }
+    }
+
+    // Send message on Enter key
+    document.getElementById('msgInput').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+
+    // Also allow Enter on name input to focus message input
+    document.getElementById('nameInput').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        document.getElementById('msgInput').focus();
+      }
+    });
+
+    // --- Particle system for extra attractiveness ---
+    const PARTICLE_COUNT = 22;
+    let particles = [];
+    function initParticles(W, H) {
+      particles = [];
+      for (let i = 0; i < PARTICLE_COUNT; i++) {
+        // blue/violet/cyan tones
+        const hues = [220, 250, 200, 180, 260, 210];
+        const h = hues[Math.floor(Math.random()*hues.length)] + Math.random()*10;
+        particles.push({
+          x: Math.random() * W,
+          y: H/2 + (Math.random()-0.5)*30,
+          r: 1.5 + Math.random()*2.5,
+          speed: 0.3 + Math.random()*0.7,
+          phase: Math.random()*Math.PI*2,
+          color: `hsla(${h}, 90%, 70%, 0.85)`
+        });
+      }
+    }
+
+    // --- Improved Realistic Audio Visualizer (waves) ---
+    let audioCtx, analyser, source, dataArray, animationId;
+    function startVisualizer() {
+      const audio = document.getElementById('bgMusic');
+      const canvas = document.getElementById('wavesCanvas');
+      const ctx = canvas.getContext('2d');
+
+      function resizeCanvas() {
+        const parent = canvas.parentElement;
+        canvas.width = parent.offsetWidth;
+        canvas.height = parent.offsetHeight || 110;
+        initParticles(canvas.width, canvas.height);
+      }
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        analyser = audioCtx.createAnalyser();
+        analyser.fftSize = 512;
+        dataArray = new Uint8Array(analyser.frequencyBinCount);
+      }
+      if (!source) {
+        source = audioCtx.createMediaElementSource(audio);
+        source.connect(analyser);
+        analyser.connect(audioCtx.destination);
+      }
+
+      function drawWaves() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        analyser.getByteFrequencyData(dataArray);
+
+        // Parameters for realism
+        const W = canvas.width;
+        const H = canvas.height;
+        const centerY = H / 2;
+        const waveCount = 3; // number of overlapping waves
+        const barCount = 128;
+        const step = Math.floor(dataArray.length / barCount);
+        const time = Date.now() / 900;
+
+        // Draw animated dark background gradient
+        ctx.save();
+        let bgGrad = ctx.createLinearGradient(0, 0, W, H);
+        bgGrad.addColorStop(0, `hsl(${220 + Math.sin(time/2)*10}, 60%, 13%)`);
+        bgGrad.addColorStop(1, `hsl(${260 + Math.cos(time/2)*10}, 70%, 18%)`);
+        ctx.fillStyle = bgGrad;
+        ctx.globalAlpha = 0.55;
+        ctx.fillRect(0, 0, W, H);
+        ctx.globalAlpha = 1;
+        ctx.restore();
+
+        // Draw multiple sine waves for realism
+        for (let w = 0; w < waveCount; w++) {
+          ctx.save();
+          ctx.beginPath();
+          for (let i = 0; i <= barCount; i++) {
+            const freqIdx = Math.min(i * step + w * 2, dataArray.length - 1);
+            const v = dataArray[freqIdx] / 255;
+            // Each wave has different amplitude, frequency, and phase
+            const amp = (w === 0 ? 32 : w === 1 ? 18 : 10) + v * (w === 0 ? 36 : w === 1 ? 22 : 14);
+            const freq = (w === 0 ? 1.2 : w === 1 ? 2.1 : 3.3);
+            const phase = time * (w + 1) + i * 0.12 * (w + 1);
+            const y = centerY + Math.sin(i / (barCount / freq) + phase) * amp * (0.7 + v * 0.6);
+            const x = (i / barCount) * W;
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          }
+          // Style for each wave (dark/blue/violet/cyan)
+          let grad = ctx.createLinearGradient(0, 0, W, H);
+          if (w === 0) {
+            grad.addColorStop(0, '#23213a');
+            grad.addColorStop(0.2, '#1e3a5c');
+            grad.addColorStop(0.5, '#3a7bd5');
+            grad.addColorStop(0.8, '#00d2ff');
+            grad.addColorStop(1, '#23213a');
+          } else if (w === 1) {
+            grad.addColorStop(0, '#6bffe399');
+            grad.addColorStop(1, '#b98cff99');
+          } else {
+            grad.addColorStop(0, '#23213a88');
+            grad.addColorStop(1, '#3a7bd588');
+          }
+          ctx.strokeStyle = grad;
+          ctx.shadowColor = w === 0 ? '#3a7bd5' : w === 1 ? '#00d2ff' : '#b98cff';
+          ctx.shadowBlur = w === 0 ? 22 : 10;
+          ctx.lineWidth = w === 0 ? 4.2 : w === 1 ? 2.2 : 1.2;
+          ctx.globalAlpha = w === 0 ? 1 : 0.7;
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        // Fill under the main wave for glow
+        ctx.save();
+        ctx.beginPath();
+        for (let i = 0; i <= barCount; i++) {
+          const freqIdx = Math.min(i * step, dataArray.length - 1);
+          const v = dataArray[freqIdx] / 255;
+          const amp = 32 + v * 36;
+          const freq = 1.2;
+          const phase = time * 1.1 + i * 0.12;
+          const y = centerY + Math.sin(i / (barCount / freq) + phase) * amp * (0.7 + v * 0.6);
+          const x = (i / barCount) * W;
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.lineTo(W, H);
+        ctx.lineTo(0, H);
+        ctx.closePath();
+        let fillGrad = ctx.createLinearGradient(0, 0, W, H);
+        fillGrad.addColorStop(0, '#23213a66');
+        fillGrad.addColorStop(0.3, '#3a7bd588');
+        fillGrad.addColorStop(0.7, '#00d2ff55');
+        fillGrad.addColorStop(1, '#23213a33');
+        ctx.globalAlpha = 0.55;
+        ctx.filter = 'blur(2.5px)';
+        ctx.fillStyle = fillGrad;
+        ctx.shadowColor = '#3a7bd5';
+        ctx.shadowBlur = 32;
+        ctx.fill();
+        ctx.filter = 'none';
+        ctx.globalAlpha = 1;
+        ctx.restore();
+
+        // Reflection effect
+        ctx.save();
+        ctx.scale(1, -1);
+        ctx.globalAlpha = 0.18;
+        ctx.beginPath();
+        for (let i = 0; i <= barCount; i++) {
+          const freqIdx = Math.min(i * step, dataArray.length - 1);
+          const v = dataArray[freqIdx] / 255;
+          const amp = 32 + v * 36;
+          const freq = 1.2;
+          const phase = time * 1.1 + i * 0.12;
+          const y = centerY + Math.sin(i / (barCount / freq) + phase) * amp * (0.7 + v * 0.6);
+          const x = (i / barCount) * W;
+          if (i === 0) ctx.moveTo(x, -y + H + centerY*0.7);
+          else ctx.lineTo(x, -y + H + centerY*0.7);
+        }
+        ctx.lineTo(W, H*2);
+        ctx.lineTo(0, H*2);
+        ctx.closePath();
+        ctx.fillStyle = fillGrad;
+        ctx.filter = 'blur(6px)';
+        ctx.fill();
+        ctx.filter = 'none';
+        ctx.globalAlpha = 1;
+        ctx.restore();
+
+        // Draw glowing particles above the main wave
+        for (let p of particles) {
+          // Move particle horizontally
+          p.x += p.speed + Math.sin(time + p.phase) * 0.2;
+          if (p.x > W + 10) p.x = -10;
+          // Make it float above the main wave
+          const i = Math.floor((p.x / W) * barCount);
+          const freqIdx = Math.min(i * step, dataArray.length - 1);
+          const v = dataArray[freqIdx] / 255;
+          const amp = 32 + v * 36;
+          const freq = 1.2;
+          const phase = time * 1.1 + i * 0.12;
+          const y = centerY + Math.sin(i / (barCount / freq) + phase) * amp * (0.7 + v * 0.6) - 10 - Math.abs(Math.sin(time + p.phase) * 8);
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(p.x, y, p.r, 0, Math.PI*2);
+          ctx.shadowColor = p.color;
+          ctx.shadowBlur = 16;
+          ctx.globalAlpha = 0.85;
+          ctx.fillStyle = p.color;
+          ctx.fill();
+          ctx.globalAlpha = 1;
+          ctx.restore();
+        }
+
+        animationId = requestAnimationFrame(drawWaves);
+      }
+      if (animationId) cancelAnimationFrame(animationId);
+      drawWaves();
+    }
+  </script>
+</body>
+</html>
